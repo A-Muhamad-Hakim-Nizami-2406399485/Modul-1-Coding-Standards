@@ -48,4 +48,8 @@ public class ProductRepository {
 
         return create(product);
     }
+
+    public boolean delete(String id) {
+        return productData.removeIf(p -> p.getProductId() != null && p.getProductId().equals(id));
+    }
 }
