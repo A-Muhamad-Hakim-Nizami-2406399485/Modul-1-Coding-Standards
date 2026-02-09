@@ -3,19 +3,14 @@ package id.ac.ui.cs.advprog.eshop.repository;
 import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @Repository
 public class ProductRepository {
-    // thread-safe list to hold in-memory products for this exercise
-    private final List<Product> productData = new CopyOnWriteArrayList<>();
+    private final List<Product> productData = new ArrayList<>();
 
     public Product create(Product product) {
-        // assign id if missing
         if (product.getProductId() == null || product.getProductId().isBlank()) {
             product.setProductId(UUID.randomUUID().toString());
         }
@@ -23,9 +18,8 @@ public class ProductRepository {
         return product;
     }
 
-    public List<Product> findAll() {
-        // return a copy to avoid callers mutating the internal list
-        return new ArrayList<>(productData);
+    public Iterator<Product> findAll() {
+        return productData.iterator();
     }
 
     public Optional<Product> findById(String id) {
