@@ -10,4 +10,6 @@ public interface ProductService {
     Product update(Product product);
 
     Product findById(String id);
+
+    boolean delete(String id);
 }
