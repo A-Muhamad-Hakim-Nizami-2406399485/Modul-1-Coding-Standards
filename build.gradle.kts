@@ -8,6 +8,7 @@ plugins {
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
     id("jacoco")
+    id("com.github.spotbugs") version "6.0.27"
 }
 
 java {
@@ -76,4 +77,13 @@ tasks.jacocoTestReport {
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
+}
+
+spotbugs {
+    toolVersion.set("4.8.6")
+    excludeFilter.set(file("spotbugs-exclude.xml"))
+}
+
+tasks.withType<com.github.spotbugs.snom.SpotBugsTask>().configureEach {
+    ignoreFailures = true
 }
