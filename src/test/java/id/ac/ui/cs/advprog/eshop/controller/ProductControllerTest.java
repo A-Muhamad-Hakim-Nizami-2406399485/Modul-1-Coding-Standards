@@ -39,7 +39,7 @@ class ProductControllerTest {
     void testCreateProductPage() throws Exception {
         mockMvc.perform(get("/product/create"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("createProduct"))
+                .andExpect(view().name("CreateProduct"))
                 .andExpect(model().attributeExists("product"));
     }
 
@@ -57,7 +57,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void testCreateProductPostValidationError() throws Exception {
+    void testCreateProductPostEmptyFields() throws Exception {
         when(productService.create(any(Product.class))).thenReturn(sampleProduct);
 
         mockMvc.perform(post("/product/create")
@@ -76,7 +76,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/edit/eb558e9f-1c39-460e-8860-71af6af63bd6"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("editProduct"))
+                .andExpect(view().name("EditProduct"))
                 .andExpect(model().attribute("product", sampleProduct));
     }
 
@@ -105,8 +105,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void testEditProductPostValidationError() throws Exception {
-        // Note: Without @Valid annotation, validation errors won't trigger
+    void testEditProductPostEmptyFields() throws Exception {
         when(productService.update(any(Product.class))).thenReturn(sampleProduct);
 
         mockMvc.perform(post("/product/edit")
@@ -127,7 +126,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(model().attribute("products", productList));
 
         verify(productService, times(1)).findAll();
@@ -139,7 +138,7 @@ class ProductControllerTest {
 
         mockMvc.perform(get("/product/list"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("productList"))
+                .andExpect(view().name("ProductList"))
                 .andExpect(model().attribute("products", new ArrayList<>()));
 
         verify(productService, times(1)).findAll();
