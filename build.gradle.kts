@@ -7,6 +7,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.10"
     id("io.spring.dependency-management") version "1.1.7"
+    id("jacoco")
 }
 
 java {
@@ -60,4 +61,19 @@ tasks.register<Test>("functionalTest") {
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
+}
+
+jacoco {
+    toolVersion = "0.8.11"
+}
+
+tasks.jacocoTestReport {
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
 }
