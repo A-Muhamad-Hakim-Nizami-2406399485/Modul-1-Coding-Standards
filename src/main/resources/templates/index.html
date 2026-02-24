@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ADV Shop</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { padding-top: 40px; }
+    </style>
+    <link rel="icon" href="data:,">
+</head>
+<body>
+<div class="container">
+    <h3>Welcome</h3>
+    <p class="lead">Navigate to the product list to manage your items.</p>
+    <a th:href="@{/product/list}" class="btn btn-primary">Go to Product List</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
