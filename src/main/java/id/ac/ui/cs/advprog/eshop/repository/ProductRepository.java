@@ -4,8 +4,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 @Repository
 public class ProductRepository {
     private final List<Product> productData = new ArrayList<>();
