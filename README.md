@@ -79,3 +79,38 @@ During the exercise, I fixed the following code quality issues:
 2. Configure quality gates that fail builds on critical issues
 3. Add artifact publishing
 4. Add environment-specific configurations (dev/staging/prod)
+
+# Reflection 4
+
+I applied SOLID principles to the project and refactored parts of the code to better follow them. Below I explain which principles I applied, why, and give examples from the codebase.
+
+1. Principles applied
+
+- Single Responsibility Principle (SRP): I separated controller responsibilities. Previously the file ProductController.java contained both product and car endpoints; I extracted CarController into its own class so each controller handles a single resource. Example: src/main/java/.../controller/CarController.java now exclusively manages Car-related routes. This makes controllers change only when their specific resource behavior must change.
+
+- Open/Closed Principle (OCP): I changed field injection to constructor injection for services (ProductController, CarServiceImpl, ProductServiceImpl already used constructor injection) so dependencies are provided via abstractions (interfaces) and implementations can be extended without modifying existing classes. New behavior can be added by implementing service interfaces and registering beans.
+
+- Liskov Substitution Principle (LSP): I ensured service interfaces (ProductService, CarService) define stable contracts that implementations follow. Controllers depend on the abstractions rather than concrete implementations; replacing an implementation with another that honors the interface will not break controllers.
+
+- Interface Segregation Principle (ISP): I kept service interfaces focused (ProductService and CarService expose only methods relevant to their clients). I avoided a fat service interface that would force controllers to implement unused methods.
+
+- Dependency Inversion Principle (DIP): High-level modules (controllers) depend on abstractions (service interfaces) rather than concrete repositories. Repositories remain low-level details behind service interfaces. Constructor injection enforces this inversion of control.
+
+2. Advantages of applying SOLID (with examples)
+
+- Improved testability: Because controllers accept services via constructors, tests can provide mocks easily. Example: ProductController(ProductService) constructor allows unit tests to inject a mock ProductService.
+- Easier to extend (OCP): To add a caching layer for products, create a new ProductService implementation (e.g., CachedProductService) that wraps the existing one and register it as a bean; ProductController does not need modification.
+- Clear responsibilities (SRP): Each controller/service has one reason to change. For example, changes in car routing won't affect ProductController after extracting CarController.
+- Safer refactoring (LSP/ISP): Small, focused interfaces reduce the chance that replacing an implementation breaks callers. If we add another ProductService implementation, it must satisfy the ProductService contract.
+
+3. Disadvantages of not applying SOLID (with examples from before changes)
+
+- Tight coupling and harder testing: When ProductController included Car endpoints and used field injection, tests had to set up more of the application context or manipulated internal fields. This made unit testing harder and slower.
+- Fragile code: Without DIP, controllers that instantiate concrete repositories or rely on concrete implementations become difficult to change. For example, if a controller instantiated CarRepository directly, swapping to a database-backed repository would require editing controller code.
+- Bloated interfaces and implementations: A large interface forces implementers to provide unused methods; this leads to violations of ISP and accidental coupling.
+
+Files changed:
+
+- src/main/java/id/ac/ui/cs/advprog/eshop/controller/ProductController.java — replaced field injection with constructor injection and removed Car endpoints
+- src/main/java/id/ac/ui/cs/advprog/eshop/controller/CarController.java — new class extracted from ProductController
+- src/main/java/id/ac/ui/cs/advprog/eshop/service/CarServiceImpl.java — replaced field injection with constructor injection
